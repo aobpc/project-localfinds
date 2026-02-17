@@ -10,7 +10,7 @@ endif
 # -------- VARIABLES --------
 
 VENV = venv
-APP = src/backend.py
+APP = src/localfinds/app.py
 
 ifeq ($(WINDOWS),1)
 	PYTHON = python
@@ -31,8 +31,7 @@ venv:
 
 install:
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install pytest
-	$(PY) -m pip install flask
+	$(PY) -m pip install -r requirements.txt
 
 setup: venv install
 
