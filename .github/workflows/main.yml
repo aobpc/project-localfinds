@@ -1,0 +1,55 @@
+name: Sync Fork (Preserve Workflows)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout fork
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      # 2️⃣ Add upstream
+      - name: Add upstream
+        run: |
+          git remote | grep upstream || git remote add upstream https://github.com/IUS-CS/project-localfinds
+          git fetch upstream
+
+      # 3️⃣ Set Git identity
+      - name: Set Git identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 4️⃣ Force overwrite everything except workflows
+      - name: Force sync from upstream, preserving workflows
+        run: |
+          # Save fork workflows temporarily
+          mkdir -p /tmp/fork-workflows
+          cp -r .github/workflows /tmp/fork-workflows/ || echo "No workflows to preserve"
+
+          # Reset main branch to upstream/main (overwrite everything)
+          git fetch upstream
+          git checkout main
+          git reset --hard upstream/main
+
+          # Restore workflows from temporary location
+          mkdir -p .github
+          cp -r /tmp/fork-workflows/workflows .github/ || echo "No workflows to restore"
+
+          # Commit restored workflows if any
+          git add .github/workflows
+          git commit -m "Preserve fork workflows after upstream sync" || echo "No workflow changes to commit"
+
+      # 5️⃣ Push back to fork
+      - name: Push changes
+        run: git push origin main --force
