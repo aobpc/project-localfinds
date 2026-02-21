@@ -3,7 +3,7 @@ name: Sync Fork (Preserve Workflows)
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 * * * *'   # once per hour (change if desired)
 
 jobs:
   sync:
@@ -24,32 +24,42 @@ jobs:
           git remote | grep upstream || git remote add upstream https://github.com/IUS-CS/project-localfinds
           git fetch upstream
 
-      # 3️⃣ Set Git identity
+      # 3️⃣ Check if upstream is ahead
+      - name: Check if upstream is ahead
+        id: check
+        run: |
+          git fetch upstream
+          if git merge-base --is-ancestor main upstream/main; then
+            echo "Upstream has new commits."
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No upstream changes."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      # 4️⃣ Set Git identity (only if syncing)
       - name: Set Git identity
+        if: steps.check.outputs.changed == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 4️⃣ Force overwrite everything except workflows
+      # 5️⃣ Force overwrite except workflows (only if syncing)
       - name: Force sync from upstream, preserving workflows
+        if: steps.check.outputs.changed == 'true'
         run: |
-          # Save fork workflows temporarily
           mkdir -p /tmp/fork-workflows
           cp -r .github/workflows /tmp/fork-workflows/ || echo "No workflows to preserve"
 
-          # Reset main branch to upstream/main (overwrite everything)
-          git fetch upstream
-          git checkout main
           git reset --hard upstream/main
 
-          # Restore workflows from temporary location
           mkdir -p .github
           cp -r /tmp/fork-workflows/workflows .github/ || echo "No workflows to restore"
 
-          # Commit restored workflows if any
           git add .github/workflows
           git commit -m "Preserve fork workflows after upstream sync" || echo "No workflow changes to commit"
 
-      # 5️⃣ Push back to fork
+      # 6️⃣ Push back to fork (only if syncing)
       - name: Push changes
-        run: git push origin main --force
+        if: steps.check.outputs.changed == 'true'
+        run: git push origin main --force-with-lease
