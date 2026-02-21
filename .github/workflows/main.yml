@@ -3,7 +3,7 @@ name: Sync Fork (Preserve Workflows)
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'   # once per hour (change if desired)
+    - cron: '*/5 * * * *'   # once per hour (change if desired)
 
 jobs:
   sync:
