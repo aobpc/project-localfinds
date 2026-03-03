@@ -1,0 +1,220 @@
+/* GOOGLE FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+/* VARIABLES */
+:root {
+    /* Colors */
+    --color-bg: #fafafa;
+    --color-text: #444;
+    --color-link: #0077cc;
+    --color-link-hover: #005fa3;
+    --color-error: #ff0099;
+    --color-button-bg: #FEE996;
+    --color-footer-text: #aaa;
+    --color-border: #ddd;
+    --color-table-border: #aaa;
+
+    /* Fonts */
+    --font-primary: 'Quicksand', sans-serif;
+    --font-secondary: 'Lato', sans-serif;
+
+    /* Font sizes */
+    --font-base: 1.2rem;
+    --font-small: 0.8em;
+    --font-large: 2.4em;
+    --font-table-header: 1.6em;
+
+    /* Spacing */
+    --spacing-base: 20px;
+    --spacing-page: 40px;
+    --spacing-form-padding: 30px;
+    --spacing-btn-padding: 10px 16px;
+    --spacing-border-radius: 4px;
+    --spacing-btn-radius: 36px;
+
+    /* Table widths */
+    --table-width: 90%;
+}
+
+/* BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--font-base);
+    letter-spacing: 1px;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-wrapper {
+    padding: var(--spacing-base) var(--spacing-page);
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-link);
+    cursor: pointer;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+
+/* LAYOUT - HEADER */
+.site-header {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-header,
+.account-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.site-header img {
+    width: 80px;
+    margin-right: 40px;
+}
+
+/* NAVIGATION */
+nav ul {
+    display: flex;
+    align-items: center;
+}
+
+nav li {
+    margin-left: 20px;
+}
+
+nav li a {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: var(--font-small);
+    letter-spacing: 2px;
+}
+
+/* BUTTONS */
+button,
+.btn {
+    display: inline-block;
+    border-radius: var(--spacing-btn-radius);
+    background: var(--color-button-bg);
+    border: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: var(--font-small);
+    padding: var(--spacing-btn-padding);
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+/* FORMS */
+form {
+    width: 60%;
+    margin: 0 auto;
+    padding: var(--spacing-form-padding);
+    background: white;
+    border-radius: 10px;
+    box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+}
+
+form h2 {
+    font-size: var(--font-large);
+    font-weight: 900;
+    margin-bottom: 40px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--spacing-border-radius);
+    border: 1px solid var(--color-border);
+    font-size: 1em;
+}
+
+label {
+    display: block;
+    margin: 20px 0 10px;
+}
+
+.error-message {
+    color: var(--color-error);
+    font-size: var(--font-small);
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* TABLES */
+table {
+    width: var(--table-width);
+    background: white;
+    margin: 0 auto;
+    border-radius: 12px;
+    font-family: var(--font-secondary);
+    color: var(--color-text);
+}
+
+th {
+    font-size: var(--font-table-header);
+}
+
+.record {
+    display: flex;
+    padding: 20px 10px;
+    justify-content: space-around;
+}
+
+.subject,
+.address,
+.tags,
+.author,
+.created_at {
+    padding-left: 10px;
+    border-right: 2px solid var(--color-table-border);
+}
+.subject{
+    width: 20%;
+}
+.address{
+    width: 35%;
+}
+.tags{
+    width: 20%;
+}
+.author{
+    width: 15%;
+}
+.created_at {
+    border-right: none;
+}
+
+/* FOOTER */
+footer {
+    margin-top: auto;
+    text-align: center;
+    color: var(--color-footer-text);
+    padding: 30px 0;
+}

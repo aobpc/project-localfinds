@@ -1,36 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        {{render_partial('shared/partials/metadata.html')}}
-        <title>
-            Home | LocalFinds
-        </title>
-    </head>
-    <body>
-        <header>
-            {{render_partial('shared/partials/header.html')}}
-        </header>
-        <main>
-            <table class="previewhost">
-                <thead>
-                    <th>Newest Finds:</th>
-                </thead>
-                <tbody class="previewcontainer">
-                    {% for post in posts %}
-                    <tr class="preview">
-                        {{ render_partial('shared/partials/post_view.html', post=post) }}
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="5">No posts yet.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </main>
-        <footer>
-            {{render_partial('shared/partials/footer.html')}}
-        </footer>
-        
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home | LocalFinds{% endblock %}
+
+{% block content %}
+<table class="posts-table">
+    <thead>
+        <th>Newest Finds:</th>
+    </thead>
+    <tbody class="posts-records">
+        {% for post in posts %}
+        <tr class="record">
+            <td class="subject">
+                <a href="{{ url_for('serve_post', post_id=post['id']) }}">{{ post.subject }}</a>
+            </td>
+            <td class="address">{{ post.address }}</td>
+            <td class="tags">{{ post.tags }}</td>
+            <td class="author">{{ post.author_id }}</td>
+            <td class="created_at">{{ post.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">No posts yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
