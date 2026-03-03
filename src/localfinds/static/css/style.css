@@ -1,0 +1,199 @@
+:root {
+    --primary-color: #b72121;
+    --text-light: #ffffff;
+    --text-dark: #000000;
+    --border-color: #b72121;
+    --hover-btn: #ffffff;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+main { flex: 1; }
+
+.site-header, .site-footer {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+}
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.site-footer {
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.logo { 
+    height: 50px; width: auto; 
+}
+
+.header-nav {
+    display: flex;
+    gap: 15px; 
+    align-items: center;
+}
+
+.username { 
+    font-weight: bold; color: var(--text-light); 
+}
+
+.header-nav .btn {
+    text-decoration: none;
+    padding: 6px 12px;
+    background-color: var(--text-light);
+    color: #000;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.header-nav .btn:hover { 
+    background-color: var(--hover-btn); 
+}
+
+/* Buttons (reuse) */
+button, .table-header a > button, div > a > button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button[type="submit"] { 
+    background-color: var(--text-light); color: #000; 
+}
+
+button[type="submit"]:hover { 
+    background-color: var(--primary-color); color: var(--text-light); 
+}
+
+.table-header a > button, div > a > button { 
+    background-color: var(--primary-color); color: var(--text-light); 
+}
+
+.table-header a > button:hover, div > a > button:hover { 
+    background-color: var(--primary-color); 
+}
+
+form, #post_head, #post_body, #login_form, #create_account_form {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px 25px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    color: var(--text-light);
+}
+
+input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+textarea { 
+    resize: vertical; 
+}
+
+input::placeholder, textarea::placeholder { 
+    color: #aaa; 
+}
+
+#post_head h1, #login_form h1:first-of-type, #create_account_form h1:first-of-type {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+#post_body h3 { margin: 0 0 15px 0; font-size: 1.3rem; }
+
+
+#post_head p:first-of-type { 
+    font-size: 0.9rem; margin-bottom: 10px; 
+}
+
+#post_head p:nth-of-type(2) { 
+    font-size: 0.85rem; margin-bottom: 0; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+table thead th {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    text-align: left;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+}
+
+table tbody td {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    vertical-align: top;
+}
+
+table tbody tr:hover { 
+    background-color: #f1f1f1; 
+}
+
+table a { 
+    color: var(--primary-color); text-decoration: none; 
+}
+
+table a:hover { 
+    text-decoration: underline; 
+}
+
+table tbody td[colspan="5"] { 
+    text-align: center; font-style: italic; color: #666; 
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0 20px 0;
+}
+
+.table-header h2 { margin: 0; color: var(--text-dark); }
+
+
+@media (max-width: 600px) {
+    form, #post_head, #post_body, #login_form, #create_account_form { padding: 15px; margin: 20px 10px; }
+    #post_head h1 { font-size: 1.5rem; }
+    #post_body h3 { font-size: 1.1rem; }
+}
+
+#login_form a {
+    color: #ffffff;          
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 15px;
+    transition: color 0.2s ease;
+}
