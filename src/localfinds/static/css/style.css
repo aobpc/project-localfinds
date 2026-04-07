@@ -28,8 +28,8 @@
 
     /* Spacing */
     --spacing-base: 1%;
-    --spacing-page: 40px;
-    --spacing-form-padding: 30px;
+    --spacing-page: 4%;
+    --spacing-form-padding: 2%;
     --spacing-btn-padding: 10px 16px;
     --spacing-border-radius: 4px;
     --spacing-btn-radius: 36px;
@@ -155,9 +155,9 @@ form h2 {
 
 input,
 textarea {
-    width: 100%;
-    margin: 10px;
-    padding: 10px 12px;
+    width: 94%;
+    margin: 1% 3%;
+    padding: 1% 2%;
     border-radius: var(--spacing-border-radius);
     border: 1px solid var(--color-border);
     font-size: 1em;
@@ -165,14 +165,14 @@ textarea {
 
 label {
     display: block;
-    margin: 20px 0 10px;
+    margin: 2% 0 1%;
 }
 
 .error-message {
     color: var(--color-error);
     font-size: var(--font-small);
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 1%;
 }
 
 /* POST CONTENT */
@@ -180,7 +180,7 @@ label {
     margin-bottom: var(--spacing-base);
 }
 .post-head p, .post-body p, .account p {
-    margin: 10px 0px;
+    margin: 1% 0px;
 }
 
 
@@ -240,7 +240,7 @@ footer {
 }
 
 /* MOBILE SCREENS */
-@media (max-width: 425px) {
+@media (max-width: 426px) {
 /* LAYOUT - HEADER */
 .site-header {
     width: 100%;
@@ -258,7 +258,7 @@ footer {
 }
 
 .site-header img {
-    width: 260px;
+    width: 130px;
     margin-right: 20px;
 }
 
@@ -276,6 +276,10 @@ nav li a {
     font-weight: 700;
     font-size: var(--font-small);
     letter-spacing: 2px;
+}
+
+form {
+    width: 90%;
 }
 
 }
