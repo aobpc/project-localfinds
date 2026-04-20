@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def initialize_posts(posts):
     conn = sqlite3.connect(posts)
     cursor = conn.cursor()
@@ -25,10 +26,13 @@ def store_post(posts, subject, content, author_id, address, tags=None):
     conn = sqlite3.connect(posts)
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT INTO posts (subject, content, author_id, address, tags)
         VALUES (?, ?, ?, ?, ?)
-    """, (subject, content, author_id, address, tags))
+    """,
+        (subject, content, author_id, address, tags),
+    )
 
     conn.commit()
     conn.close()
@@ -38,12 +42,38 @@ def get_post(posts, post_id):
     conn = sqlite3.connect(posts)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    
+
     cursor.execute("SELECT * FROM posts WHERE id = ?", (post_id,))
     post = cursor.fetchone()
-    
+
     conn.close()
     return dict(post) if post else None
+
+
+def filter_posts(posts, searchparams):
+    conn = sqlite3.connect(posts)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    like_query = f"%{searchparams}%"
+
+    cursor.execute(
+        """
+        SELECT * FROM posts
+        WHERE LOWER(subject) LIKE LOWER(?)
+           OR LOWER(content) LIKE LOWER(?)
+           OR LOWER(address) LIKE LOWER(?)
+           OR LOWER(tags) LIKE LOWER(?)
+           OR LOWER(author_id) LIKE LOWER(?)
+        ORDER BY updated_at DESC
+    """,
+        (like_query, like_query, like_query, like_query, like_query),
+    )
+
+    results = cursor.fetchall()
+    conn.close()
+
+    return [dict(post) for post in results]
 
 
 def get_all_posts(posts):
@@ -62,24 +92,31 @@ def update_post(posts, post_id, subject, content, address, tags=None):
     conn = sqlite3.connect(posts)
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE posts
         SET subject = ?, content = ?, tags = ?, address = ?, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
-    """, (subject, content, tags, address, post_id))
+    """,
+        (subject, content, tags, address, post_id),
+    )
 
     conn.commit()
     conn.close()
+
 
 def update_all_posts_author(posts, old_author, new_author):
     conn = sqlite3.connect(posts)
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
             UPDATE posts
             SET author_id = ?
             WHERE author_id = ?
-        """, (new_author, old_author))
+        """,
+        (new_author, old_author),
+    )
 
     conn.commit()
     conn.close()
@@ -94,6 +131,7 @@ def delete_post(posts, post_id):
     conn.commit()
     conn.close()
 
+
 def delete_all_posts_by_author(posts, author_id):
     conn = sqlite3.connect(posts)
     cursor = conn.cursor()
@@ -102,6 +140,7 @@ def delete_all_posts_by_author(posts, author_id):
 
     conn.commit()
     conn.close()
+
 
 def clear_posts(posts):
     conn = sqlite3.connect(posts)
