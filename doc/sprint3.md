@@ -55,7 +55,7 @@ Here are screenshots of the website in its current state:
 
 ### Actionable Commitments
 
-* As a team, we will continue making progress on this website. Focusing on mobile compatibility and updating ownership of posts with the change of usernmae. Furthermore, integration testing will be implemented between the routes databases.
+* As a team, we will continue making progress on this website. Focusing on mobile compatibility and updating ownership of posts with the change of username. Furthermore, integration testing will be implemented between the routes databases.
 
 ## Next Sprint Planning
 
