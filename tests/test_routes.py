@@ -44,6 +44,7 @@ def login(client, username, password):
 
 def test_create_post_authorized(client):
     login(client, "admin", "password")
+    time.sleep(1)
     response = client.post(
         "/posts/create",
         data={
@@ -54,12 +55,11 @@ def test_create_post_authorized(client):
         },
         follow_redirects=True,
     )
-    time.sleep(1)
     assert b"New Post" in response.data
-    assert get_all_posts(posts)[1]["subject"] == "New Post"
-    assert get_all_posts(posts)[1]["content"] == "Content here"
-    assert get_all_posts(posts)[1]["address"] == "456 Road St"
-    assert get_all_posts(posts)[1]["tags"] == "test"
+    assert get_all_posts(posts)[0]["subject"] == "New Post"
+    assert get_all_posts(posts)[0]["content"] == "Content here"
+    assert get_all_posts(posts)[0]["address"] == "456 Road St"
+    assert get_all_posts(posts)[0]["tags"] == "test"
     assert len(get_all_posts(posts)) == 2
 
 
