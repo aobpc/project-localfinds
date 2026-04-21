@@ -64,6 +64,7 @@ def test_create_post_authorized(client):
 
 
 def test_create_post_unauthorized(client):
+    time.sleep(1)
     response = client.post(
         "/posts/create",
         data={
