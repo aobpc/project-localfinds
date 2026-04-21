@@ -1,10 +1,22 @@
-import pytest 
+import pytest
 import tempfile
 import os
 import time
-from src.localfinds.models.posts import delete_all_posts_by_author, initialize_posts, store_post, get_post, get_all_posts, update_all_posts_author, update_post, delete_post, clear_posts
+from src.localfinds.models.posts import (
+    delete_all_posts_by_author,
+    initialize_posts,
+    store_post,
+    get_post,
+    get_all_posts,
+    update_all_posts_author,
+    update_post,
+    delete_post,
+    clear_posts,
+    filter_posts,
+)
 
-# Run 'pytest -v' to run test functions in this file. Make sure to have pytest is installed.
+# Run 'pytest -v' to run test functions in this file. Make sure to have pytest installed.
+
 
 # Temporary databased stored in OS's temp directory, automatically deleted after testing.
 @pytest.fixture(autouse=True)
@@ -13,7 +25,7 @@ def temp_db():
     db_path = temp_file.name
     temp_file.close()
     initialize_posts(db_path)
-    yield db_path  
+    yield db_path
     os.remove(db_path)
 
 
@@ -26,25 +38,77 @@ def test_store_post(temp_db):
     assert post["address"] == "123 Street"
     assert post["tags"] == "intro"
 
+
 def test_get_post(temp_db):
-    store_post(temp_db,"Test Post", "This is the content", "user1", "123 Street", "test, sample")
-    post = get_post(temp_db, 1) 
+    store_post(
+        temp_db,
+        "Test Post",
+        "This is the content",
+        "user1",
+        "123 Street",
+        "test, sample",
+    )
+    post = get_post(temp_db, 1)
     assert post is not None
-    assert post["subject"] == "Test Post"           
-    assert post["content"] == "This is the content" 
-    assert post["author_id"] == "user1"               
-    assert post["address"] == "123 Street"          
-    assert post["tags"] == "test, sample"        
+    assert post["subject"] == "Test Post"
+    assert post["content"] == "This is the content"
+    assert post["author_id"] == "user1"
+    assert post["address"] == "123 Street"
+    assert post["tags"] == "test, sample"
+
+
+def test_filter_posts(temp_db):
+    store_post(temp_db, "Hello World", "Content here", "user1", "123 Street", "intro")
+    time.sleep(1)
+    store_post(temp_db, "Another Post", "Different content", "user2", "456 Ave", "misc")
+
+    results = filter_posts(temp_db, "hello")
+
+    assert len(results) == 1
+    assert results[0]["subject"] == "Hello World"
+
+
+def test_filter_posts_multiple_fields(temp_db):
+    store_post(temp_db, "Post A", "Some content", "user1", "123 Street", "intro")
+    time.sleep(1)
+    store_post(temp_db, "Post B", "Other stuff", "user2", "456 Ave", "special")
+
+    results = filter_posts(temp_db, "456")
+    assert len(results) == 1
+    assert results[0]["subject"] == "Post B"
+
+    results = filter_posts(temp_db, "intro")
+    assert len(results) == 1
+    assert results[0]["subject"] == "Post A"
+
+    results = filter_posts(temp_db, "user2")
+    assert len(results) == 1
+    assert results[0]["subject"] == "Post B"
+
+
+def test_filter_posts_case_insensitive(temp_db):
+    store_post(temp_db, "HELLO", "Content", "user1", "Addr", "tag")
+
+    results = filter_posts(temp_db, "hello")
+
+    assert len(results) == 1
+    assert results[0]["subject"] == "HELLO"
+
+
+def test_filter_posts_no_results(temp_db):
+    store_post(temp_db, "Hello", "Content", "user1", "Addr", "tag")
+
+    results = filter_posts(temp_db, "nonexistent")
+
+    assert len(results) == 0
 
 
 def test_get_all_posts(temp_db):
     store_post(temp_db, "Post A", "Content A", "user1", "Addr1")
-    # Ensure diferent timestamp.
     time.sleep(1)
     store_post(temp_db, "Post B", "Content B", "user2", "Addr2")
     posts = get_all_posts(temp_db)
     assert len(posts) == 2
-    # Check order by updated_at DESC
     assert posts[0]["subject"] == "Post B"
     assert posts[1]["subject"] == "Post A"
 
@@ -58,13 +122,16 @@ def test_update_post(temp_db):
     assert post["address"] == "New Addr"
     assert post["tags"] == "tag1"
 
+
 def test_update_all_posts_author(temp_db):
     store_post(temp_db, "Post 1", "Content 1", "user1", "Addr1")
+    time.sleep(1)
     store_post(temp_db, "Post 2", "Content 2", "user1", "Addr2")
+    time.sleep(1)
     store_post(temp_db, "Post 3", "Content 3", "user2", "Addr3")
-    
+
     update_all_posts_author(temp_db, "user1", "new_user")
-    
+
     posts = get_all_posts(temp_db)
     for post in posts:
         if post["subject"] in ["Post 1", "Post 2"]:
@@ -72,25 +139,31 @@ def test_update_all_posts_author(temp_db):
         else:
             assert post["author_id"] == "user2"
 
+
 def test_delete_post(temp_db):
     store_post(temp_db, "Temp", "Temp Content", "user1", "Addr1")
     delete_post(temp_db, 1)
     posts = get_all_posts(temp_db)
     assert len(posts) == 0
 
+
 def test_delete_all_posts_by_author(temp_db):
     store_post(temp_db, "Post 1", "Content 1", "user1", "Addr1")
+    time.sleep(1)
     store_post(temp_db, "Post 2", "Content 2", "user1", "Addr2")
+    time.sleep(1)
     store_post(temp_db, "Post 3", "Content 3", "user2", "Addr3")
-    
+
     delete_all_posts_by_author(temp_db, "user1")
-    
+
     posts = get_all_posts(temp_db)
     assert len(posts) == 1
     assert posts[0]["author_id"] == "user2"
 
+
 def test_clear_posts(temp_db):
     store_post(temp_db, "Temp1", "Temp Content 1", "user1", "Addr1")
+    time.sleep(1)
     store_post(temp_db, "Temp2", "Temp Content 2", "user2", "Addr2")
     clear_posts(temp_db)
     posts = get_all_posts(temp_db)
