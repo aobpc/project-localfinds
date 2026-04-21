@@ -50,13 +50,3 @@ debug:
 # -------- TESTS --------
 test:
 	$(PY) -m pytest -v
-
-# -------- CLEAN --------
-clean:
-	find . -type d -name "__pycache__" -exec rm -r {} +
-	find . -name "*.pyc" -delete
-	rm -rf .pytest_cache
-
-# -------- DB RESET --------
-reset-db:
-	rm -f src/database/posts.db
