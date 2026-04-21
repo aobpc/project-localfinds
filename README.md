@@ -49,7 +49,11 @@ LocalFinds was created as a academic collaborative project to:
 
 ## Testing
 
-- Execute all tests.
-  ```
-  make test
-  ```
+1. Setup the environment.
+   ```
+   make setup
+   ```
+2. Execute all tests.
+   ```
+   make test
+   ```
