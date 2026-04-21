@@ -10,14 +10,17 @@
   </div>
 
   <nav class="account-nav">
-  {% if 'user_id' in session %}
+    {% if 'user_id' in session %}
     <a class="show-menu">{{ session.username }}</a>
     <div class="account-menu">
       <div class="menu-btn-container">
         <a href="{{ url_for('create_post') }}" class="menu-btn">New Find</a>
       </div>
       <div class="menu-btn-container">
-        <a href="{{ url_for('view_account', username=session['username']) }}" class="menu-btn">
+        <a
+          href="{{ url_for('view_account', username=session['username']) }}"
+          class="menu-btn"
+        >
           My Account
         </a>
       </div>
@@ -26,24 +29,24 @@
       </div>
     </div>
 
-  {% elif request.endpoint not in ['create_account', 'login'] %}
+    {% elif request.endpoint not in ['create_account', 'login'] %}
     <a href="{{ url_for('login') }}" class="btn">Log In</a>
-  {% endif %}
-</nav>
-    <script>
-      var coll = document.getElementsByClassName("show-menu");
-      var i;
+    {% endif %}
+  </nav>
+  <script>
+    var coll = document.getElementsByClassName("show-menu");
+    var i;
 
-      for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function () {
-          this.classList.toggle("active");
-          var content = this.nextElementSibling;
-          if (content.style.display === "block") {
-            content.style.display = "none";
-          } else {
-            content.style.display = "block";
-          }
-        });
-      }
-    </script>
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+  </script>
 </header>
