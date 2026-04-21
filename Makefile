@@ -50,3 +50,9 @@ debug:
 # -------- TESTS --------
 test:
 	$(PY) -m pytest -v
+
+# -------- FORMAT -------
+format:
+	$(PY) -m black .
+	npx prettier --write .
+
