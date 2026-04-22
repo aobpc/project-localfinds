@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% block title %}Home | LocalFinds{% endblock %} {%
 block content %}
 <form action="{{ url_for('search_posts') }}" method="POST" class="search-bar">
-  <input type="text" name="search" placeholder="Search posts..." required />
-  <button type="submit">Search</button>
+  <input type="text" name="search" placeholder="Search finds..." required />
+  <button class="btn" type="submit">Search</button>
 </form>
 <table class="posts-table">
   <thead>

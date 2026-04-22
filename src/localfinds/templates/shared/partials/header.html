@@ -9,11 +9,7 @@
     </a>
   </div>
 
-  <nav class="account-nav">
-    {% if 'user_id' in session %}
-    <div class="new-post-button">
-      <a href="{{ url_for('create_post') }}" class="btn">New Find</a>
-    </div>
+
     <nav class="account-nav">
       {% if 'user_id' in session %}
       <a class="show-menu"> {{ session.username }} </a>
@@ -60,5 +56,4 @@
         });
       }
     </script>
-  </nav>
 </header>
