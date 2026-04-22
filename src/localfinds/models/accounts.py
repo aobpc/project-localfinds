@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def initialize_accounts(accounts):
     conn = sqlite3.connect(accounts)
     cursor = conn.cursor()
@@ -9,6 +10,7 @@ def initialize_accounts(accounts):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
+            bio TEXT DEFAULT '',
             joined DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -22,10 +24,13 @@ def store_account(accounts, username, password):
     cursor = conn.cursor()
 
     try:
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO accounts (username, password)
             VALUES (?, ?)
-        """, (username, password))
+        """,
+            (username, password),
+        )
         conn.commit()
         success = True
     except sqlite3.IntegrityError:
@@ -40,26 +45,25 @@ def get_account(accounts, account_id):
     conn = sqlite3.connect(accounts)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    
+
     cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
     account = cursor.fetchone()
-    
+
     conn.close()
     return dict(account) if account else None
+
 
 def get_account_by_username(accounts, username):
     conn = sqlite3.connect(accounts)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT * FROM accounts WHERE username = ?",
-        (username,)
-    )
+    cursor.execute("SELECT * FROM accounts WHERE username = ?", (username,))
 
     account = cursor.fetchone()
     conn.close()
     return dict(account) if account else None
+
 
 def get_all_accounts(accounts):
     conn = sqlite3.connect(accounts)
@@ -72,15 +76,19 @@ def get_all_accounts(accounts):
     conn.close()
     return [dict(account) for account in accounts]
 
-def update_account(accounts, account_id, username, password):
+
+def update_account(accounts, account_id, username, password, bio=""):
     conn = sqlite3.connect(accounts)
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE accounts
-        SET username = ?, password = ?
+        SET username = ?, password = ?, bio = ?
         WHERE id = ?
-    """, (username, password, account_id))
+    """,
+        (username, password, bio, account_id),
+    )
 
     conn.commit()
     conn.close()
@@ -94,6 +102,7 @@ def delete_account(accounts, account_id):
 
     conn.commit()
     conn.close()
+
 
 def clear_accounts(accounts):
     conn = sqlite3.connect(accounts)
