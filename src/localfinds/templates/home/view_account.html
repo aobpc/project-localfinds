@@ -6,7 +6,7 @@ endblock %} {% block content %}
   <p>Member since <span>{{ account.joined }}</span>.</p>
 </div>
 {% if session.username == account.username and account.username != "admin" %}
-<a href="{{ url_for('edit_account', username=account.username) }}"
+<a href="{{ url_for('edit_account', username=account.username) }}" class="btn"
   >Edit Account</a
 >
 {% elif session.username == "admin" and account.username != "admin" %}
